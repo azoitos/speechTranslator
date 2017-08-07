@@ -102,9 +102,6 @@ function testSpeech() {
         socket.emit('onEnglish', result.data);
         return result.data;
       })
-      // .then(speech => {
-      //   socket.emit('onSpeak', speak(speech));
-      // })
       .catch(e => console.error(e))
   }
 

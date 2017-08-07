@@ -99,9 +99,6 @@ export default function testSpeech() {
         socket.emit('onJapanese', result.data);
         return result.data;
       })
-      // .then(speech => {
-      //   socket.emit('onSpeak', speak(speech));
-      // })
       .catch(e => console.error(e))
 
   }

@@ -29,13 +29,9 @@ io.on('connection', function (socket) {
 		socket.broadcast.emit('onEnglish', data)
 	})
 
-	socket.on('onJapanese', function (data, speechData) {
-		socket.broadcast.emit('onJapanese', data, speechData)
+	socket.on('onJapanese', function (data) {
+		socket.broadcast.emit('onJapanese', data)
 	})
-
-	// socket.on('onSpeak', function (data) {
-	// 	socket.broadcast.emit('onSpeak', data)
-	// })
 
 	socket.on('disconnect', function () {
 		console.log('The user ', socket.id, ' has left the session');
