@@ -25,13 +25,17 @@ var io = socketio(server);
 io.on('connection', function (socket) {
 	console.log('A new socket has connected', socket.id);
 
-	socket.on('onEnglish', function (data, speechData) {
-		socket.broadcast.emit('onEnglish', data, speechData)
+	socket.on('onEnglish', function (data) {
+		socket.broadcast.emit('onEnglish', data)
 	})
 
 	socket.on('onJapanese', function (data, speechData) {
 		socket.broadcast.emit('onJapanese', data, speechData)
 	})
+
+	// socket.on('onSpeak', function (data) {
+	// 	socket.broadcast.emit('onSpeak', data)
+	// })
 
 	socket.on('disconnect', function () {
 		console.log('The user ', socket.id, ' has left the session');

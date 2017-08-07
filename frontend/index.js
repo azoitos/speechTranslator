@@ -62,7 +62,8 @@ var testBtn1 = document.querySelector('.jpnButton');
 
 
 socket.on('onEnglish', function (data) {
-  translatePara.textContent = 'Translated speech: ' + data
+  translatePara.textContent = '翻訳：　' + data
+  speak(data);
 })
 
 
@@ -92,14 +93,18 @@ function testSpeech() {
     // The second [0] returns the SpeechRecognitionAlternative at position 0.
     // We then return the transcript property of the SpeechRecognitionAlternative object 
     var speechResult = event.results[0][0].transcript;
-    diagnosticPara.textContent = 'Speech received: ' + speechResult + '.';
+    diagnosticPara.textContent = 'Spoken: ' + speechResult + '.';
 
 
     //Post request to backend for translating
     axios.post('/', { speechResult })
       .then(result => {
-        socket.emit('onEnglish', result.data, speak(result.data));
+        socket.emit('onEnglish', result.data);
+        return result.data;
       })
+      // .then(speech => {
+      //   socket.emit('onSpeak', speak(speech));
+      // })
       .catch(e => console.error(e))
   }
 

@@ -60,7 +60,8 @@ socket.on('connect', () => {
   console.log('I have made a persistant two-way connection to the server!');
 
   socket.on('onJapanese', function (data) {
-    translatePara.textContent = 'Translated speech: ' + data
+    translatePara.textContent = 'Translated speech: ' + data;
+    speak(data);
   })
 })
 
@@ -91,12 +92,16 @@ export default function testSpeech() {
     // The second [0] returns the SpeechRecognitionAlternative at position 0.
     // We then return the transcript property of the SpeechRecognitionAlternative object 
     var speechResult = event.results[0][0].transcript;
-    diagnosticPara.textContent = 'Speech received: ' + speechResult + '.';
+    diagnosticPara.textContent = '話した： ' + speechResult + '.';
 
     axios.post('/nihongo', { speechResult })
       .then(result => {
-        socket.emit('onJapanese', result.data, speak(result.data));
+        socket.emit('onJapanese', result.data);
+        return result.data;
       })
+      // .then(speech => {
+      //   socket.emit('onSpeak', speak(speech));
+      // })
       .catch(e => console.error(e))
 
   }
