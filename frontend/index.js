@@ -11,7 +11,7 @@ var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEv
 var synth = window.speechSynthesis;
 var voices = [];
 
-var checkboxPara = document.querySelector('.soundOnEng');
+var checkboxPara = document.querySelector('.soundOn');
 var voiceSelect = document.querySelector('select');
 
 
