@@ -1,11 +1,60 @@
 import axios from 'axios'
 import indexJPN, { socket } from './indexJPN'
 
+
+//Speech Recognition
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
+//Speech Synthesis
+var synth = window.speechSynthesis;
+var voices = [];
 
+var checkboxPara = document.querySelector('.soundOnEng');
+var voiceSelect = document.querySelector('select');
+
+
+function populateVoiceList() {
+  voices = synth.getVoices();
+  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+  for (let i = 0; i < voices.length; i++) {
+    if (voices[i].name === "Kyoko") {
+      var option = document.createElement('option');
+      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+      option.setAttribute('data-lang', voices[i].lang);
+      option.setAttribute('data-name', voices[i].name);
+      voiceSelect.appendChild(option);
+    }
+  }
+  voiceSelect.selectedIndex = selectedIndex;
+
+}
+
+
+populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
+
+//Speak Function
+function speak(data) {
+  if (checkboxPara.checked === true) {
+    var utterThis = new SpeechSynthesisUtterance(data);
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === "Kyoko" && voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+      }
+    }
+    synth.speak(utterThis);
+  }
+}
+
+
+//HTML Query Selectors
 var diagnosticPara = document.querySelector('.outputENG');
 var translatePara = document.querySelector('.translatedJPN');
 var testBtn = document.querySelector('.engButton');
@@ -17,11 +66,10 @@ socket.on('onEnglish', function (data) {
 })
 
 
-
 function testSpeech() {
   testBtn.disabled = true;
-  testBtn.textContent = 'Test in progress';
-  diagnosticPara.textContent = 'Speech rendering';
+  testBtn.textContent = 'Talking...';
+  diagnosticPara.textContent = '';
 
   //   var grammar = '#JSGF V1.0; grammar phrase; public <phrase> = ' + phrase +';';
   var recognition = new SpeechRecognition();
@@ -45,10 +93,14 @@ function testSpeech() {
     // We then return the transcript property of the SpeechRecognitionAlternative object 
     var speechResult = event.results[0][0].transcript;
     diagnosticPara.textContent = 'Speech received: ' + speechResult + '.';
-    
-    axios.post('/', { speechResult }).then(result => {
-      socket.emit('onEnglish', result.data)
-    })
+
+
+    //Post request to backend for translating
+    axios.post('/', { speechResult })
+      .then(result => {
+        socket.emit('onEnglish', result.data, speak(result.data));
+      })
+      .catch(e => console.error(e))
   }
 
   recognition.onspeechend = function () {

@@ -7,6 +7,50 @@ var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
+//Speech Synthesis
+var synth = window.speechSynthesis;
+var voices = [];
+
+var checkboxPara = document.querySelector('.soundOnJpn');
+var voiceSelect = document.querySelector('select');
+
+
+function populateVoiceList() {
+  voices = synth.getVoices();
+  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
+  for (let i = 0; i < voices.length; i++) {
+    if (voices[i].name === "Daniel") {
+      var option = document.createElement('option');
+      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+      option.setAttribute('data-lang', voices[i].lang);
+      option.setAttribute('data-name', voices[i].name);
+      checkboxPara.appendChild(option);
+    }
+  }
+  voiceSelect.selectedIndex = selectedIndex;
+
+}
+
+populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
+
+//Speak Function
+function speak(data) {
+  if (checkboxPara.checked === true) {
+    var utterThis = new SpeechSynthesisUtterance(data);
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === "Daniel" && voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+      }
+    }
+    synth.speak(utterThis);
+  }
+}
 
 var diagnosticPara = document.querySelector('.outputJPN');
 var translatePara = document.querySelector('.translatedENG');
@@ -23,8 +67,8 @@ socket.on('connect', () => {
 
 export default function testSpeech() {
   testBtn.disabled = true;
-  testBtn.textContent = 'Test in progress';
-  diagnosticPara.textContent = 'Speech rendering';
+  testBtn.textContent = '話している。。';
+  diagnosticPara.textContent = '';
 
   //   var grammar = '#JSGF V1.0; grammar phrase; public <phrase> = ' + phrase +';';
   var recognition = new SpeechRecognition();
@@ -49,10 +93,11 @@ export default function testSpeech() {
     var speechResult = event.results[0][0].transcript;
     diagnosticPara.textContent = 'Speech received: ' + speechResult + '.';
 
-    axios.post('/nihongo', { speechResult }).then(result => {
-      // translatePara.textContent = 'Translated speech: ' + result.data
-      socket.emit('onJapanese', result.data)
-    })
+    axios.post('/nihongo', { speechResult })
+      .then(result => {
+        socket.emit('onJapanese', result.data, speak(result.data));
+      })
+      .catch(e => console.error(e))
 
   }
 
