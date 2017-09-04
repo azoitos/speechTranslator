@@ -3,6 +3,7 @@ const volleyball = require('volleyball');
 const bodyParser = require('body-parser');
 const path = require('path');
 var socketio = require('socket.io');
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(bodyParser.json())
 app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 
-const server = app.listen(3000, () => {
+const server = app.listen(PORT, () => {
 	console.log('here on port ' + server.address().port);
 });
 
