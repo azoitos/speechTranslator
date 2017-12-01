@@ -20,18 +20,29 @@ const server = app.listen(PORT, () => {
 
 app.use('/', require('./route'))
 
-
 var io = socketio(server);
+
+const rooms = {};
 
 io.on('connection', function (socket) {
 	console.log('A new socket has connected', socket.id);
 
-	socket.on('onEnglish', function (data) {
-		socket.broadcast.emit('onEnglish', data)
+	const roomName = getRoomName(socket);
+
+	socket.join(roomName);
+
+	rooms[roomName] = rooms[roomName] || [];
+
+	socket.on('onEnglish', function (...data) {
+		const roomName = getRoomName(socket);
+		rooms[roomName].push(data)
+		socket.to(roomName).emit('onEnglish', data)
 	})
 
-	socket.on('onJapanese', function (data) {
-		socket.broadcast.emit('onJapanese', data)
+	socket.on('onJapanese', function (...data) {
+		const roomName = getRoomName(socket);
+		rooms[roomName].push(data)
+		socket.to(roomName).emit('onJapanese', data)
 	})
 
 	socket.on('disconnect', function () {
@@ -39,6 +50,11 @@ io.on('connection', function (socket) {
 	});
 })
 
+function getRoomName(socket){
+	const urlArr = socket.request.headers.referer.split('/');
+	const roomName = urlArr[urlArr.length - 1];
+	return roomName
+}
 
 app.use('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '../public/index.html'));
