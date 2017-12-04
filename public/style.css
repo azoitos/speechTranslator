@@ -1,0 +1,23 @@
+.jumbotron {
+    text-align: center
+}
+
+.container {
+    display: flex;
+    justify-content: space-between
+}
+
+.english {
+    flex: 1
+}
+
+.japanese {
+    flex: 2
+}
+
+.row {
+    margin-bottom: 20px
+}
+#voice-select {
+    display: none
+}

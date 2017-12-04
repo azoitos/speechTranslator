@@ -4,46 +4,39 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <!-- <link rel="stylesheet" href="/bootstrap/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <title>Speech Translator</title>
-
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 </head>
 
 <body>
-    <div class="jumbotron" style="text-align: center">
+    <div class="jumbotron">
         <h1>Ei-Nichi / 英日</h1>
         <p>An English-Japanese Speech Translation Voice Chat / 英日翻訳ボイスチャット</p>
     </div>
     <div class="container">
-        <div class="row" style="margin-bottom: 20px">
-            <div class="col-md-6">
-                <button class="btn btn-success engButton">For English Speakers</button>
-                <div>
-                    <p class="outputENG">English:</p>
-                    <p class="translatedJPN">Translation:</p>
-                </div>
+        <div class="checkbox">
+            <label>
+                <input class="soundOn" type="checkbox"> Click here for sound
+            </label>
+        </div>
+        <div id="english">
+            <button class="btn btn-success engButton">Click here and speak English</button>
+            <div>
+                <p class="outputENG">English:</p>
+                <p class="translatedJPN">Translation:</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <button class="btn btn-danger jpnButton">日本人のため</button>
-                <div>
-                    <p class="outputJPN">Japanese: </p>
-                    <p class="translatedENG">Translated: </p>
-                </div>
-                <select style="display: none"> 
-                </select>
-                <div class="checkbox">
-                    <label>
-                        <input class="soundOn" type="checkbox"> Click here for sound
-                    </label>
-                </div>
+        <div id="japanese">
+            <button class="btn btn-danger jpnButton">ここで日本語を話す</button>
+            <div>
+                <p class="outputJPN">Japanese: </p>
+                <p class="translatedENG">Translated: </p>
             </div>
+            <select id="voice-select"></select>
         </div>
+    </div>
     </div>
 </body>
 <script src="bundle.js"></script>
