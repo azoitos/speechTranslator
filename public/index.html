@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="./style.css">
     <!-- <link rel="stylesheet" href="/bootstrap/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
     <title>Speech Translator</title>
 </head>
 
@@ -16,13 +16,8 @@
         <p>An English-Japanese Speech Translation Voice Chat / 英日翻訳ボイスチャット</p>
     </div>
     <div class="container">
-        <div class="checkbox">
-            <label>
-                <input class="soundOn" type="checkbox"> Click here for sound
-            </label>
-        </div>
         <div id="english">
-            <button class="btn btn-success engButton">Click here and speak English</button>
+            <button class="btn btn-success engButton">Click here to speak English</button>
             <div>
                 <p class="outputENG">English:</p>
                 <p class="translatedJPN">Translation:</p>
@@ -37,6 +32,12 @@
             <select id="voice-select"></select>
         </div>
     </div>
+    <div class="sound">
+        <div class="soundLabel">Sound</div>
+        <div class="soundOn">
+            <input type="checkbox" value="None" id="soundOn" class="soundOn1" name="check" checked />
+            <label for="soundOn"></label>
+        </div>
     </div>
 </body>
 <script src="bundle.js"></script>

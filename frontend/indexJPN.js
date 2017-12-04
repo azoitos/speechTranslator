@@ -11,7 +11,7 @@ var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEv
 var synth = window.speechSynthesis;
 var voices = [];
 
-var checkboxPara = document.querySelector('.soundOn');
+var checkboxPara = document.querySelector('.soundOn1');
 var voiceSelect = document.querySelector('select');
 
 
@@ -40,6 +40,8 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 //Speak Function
 function speak(data) {
+  console.log('helloo')
+  console.log('checkbox', checkboxPara.checked)
   if (checkboxPara.checked === true) {
     var utterThis = new SpeechSynthesisUtterance(data);
     var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
