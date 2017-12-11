@@ -1,58 +1,14 @@
 import axios from 'axios'
 import indexJPN, { socket } from './indexJPN'
-
-
-//Speech Recognition
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
-
-//Speech Synthesis
-var synth = window.speechSynthesis;
-var voices = [];
+const { populateVoiceList, speak, SpeechRecognition, SpeechGrammarList, SpeechRecognitionEvent } = require('./speech.js');
 
 var checkboxPara = document.querySelector('.soundOn1');
 var voiceSelect = document.querySelector('select');
 
-
-function populateVoiceList() {
-  voices = synth.getVoices();
-  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
-  for (let i = 0; i < voices.length; i++) {
-    if (voices[i].name === "Kyoko") {
-      var option = document.createElement('option');
-      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
-
-      option.setAttribute('data-lang', voices[i].lang);
-      option.setAttribute('data-name', voices[i].name);
-      voiceSelect.appendChild(option);
-    }
-  }
-  voiceSelect.selectedIndex = selectedIndex;
-
-}
-
-
-populateVoiceList();
+populateVoiceList(voiceSelect, 'Kyoko');
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
-
-
-//Speak Function
-function speak(data) {
-  if (checkboxPara.checked === true) {
-    var utterThis = new SpeechSynthesisUtterance(data);
-    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === "Kyoko" && voices[i].name === selectedOption) {
-        utterThis.voice = voices[i];
-      }
-    }
-    synth.speak(utterThis);
-  }
-}
-
 
 //HTML Query Selectors
 var diagnosticPara = document.querySelector('.outputENG');
@@ -63,7 +19,7 @@ var testBtn1 = document.querySelector('.jpnButton');
 
 socket.on('onEnglish', function (data) {
   translatePara.textContent = '翻訳：　' + data
-  speak(data);
+  speak(data, checkboxPara, 'Kyoko');
 })
 
 
