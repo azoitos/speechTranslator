@@ -6,7 +6,7 @@
   "scripts": {
     "poststart": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack -w &amp; nodemon backend/server.js"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,6 @@
     "webpack": "^3.4.1"
   },
   "devDependencies": {
-
+    "nodemon": "^1.12.7"
   }
 }
