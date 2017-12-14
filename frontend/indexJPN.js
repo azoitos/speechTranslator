@@ -1,57 +1,15 @@
 import axios from 'axios'
 import io from 'socket.io-client'
+const { populateVoiceList, speak, SpeechRecognition, SpeechGrammarList, SpeechRecognitionEvent } = require('./speech.js');
 
 export const socket = io(window.location.origin);
-
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
-
-//Speech Synthesis
-var synth = window.speechSynthesis;
-var voices = [];
 
 var checkboxPara = document.querySelector('.soundOn1');
 var voiceSelect = document.querySelector('select');
 
-
-function populateVoiceList() {
-  voices = synth.getVoices();
-  var selectedIndex = voiceSelect.selectedIndex < 0 ? 0 : voiceSelect.selectedIndex;
-  for (let i = 0; i < voices.length; i++) {
-    if (voices[i].name === "Daniel") {
-      var option = document.createElement('option');
-      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
-
-      option.setAttribute('data-lang', voices[i].lang);
-      option.setAttribute('data-name', voices[i].name);
-      checkboxPara.appendChild(option);
-    }
-  }
-  voiceSelect.selectedIndex = selectedIndex;
-
-}
-
-populateVoiceList();
+populateVoiceList(voiceSelect, 'Daniel');
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-
-
-//Speak Function
-function speak(data) {
-  console.log('helloo')
-  console.log('checkbox', checkboxPara.checked)
-  if (checkboxPara.checked === true) {
-    var utterThis = new SpeechSynthesisUtterance(data);
-    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name === "Daniel" && voices[i].name === selectedOption) {
-        utterThis.voice = voices[i];
-      }
-    }
-    synth.speak(utterThis);
-  }
 }
 
 var diagnosticPara = document.querySelector('.outputJPN');
@@ -63,7 +21,7 @@ socket.on('connect', () => {
 
   socket.on('onJapanese', function (data) {
     translatePara.textContent = 'Translated speech: ' + data;
-    speak(data);
+    speak(data, checkboxPara, 'Daniel');
   })
 })
 

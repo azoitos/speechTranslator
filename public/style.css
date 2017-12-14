@@ -19,7 +19,7 @@
     margin-bottom: 20px
 }
 #voice-select {
-    display: none
+    visibility: hidden
 }
 .sound {
     display: flex;
