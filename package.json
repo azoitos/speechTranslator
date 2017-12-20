@@ -6,7 +6,8 @@
   "scripts": {
     "poststart": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -w &amp; nodemon backend/server.js"
+    "start-dev": "webpack -w &amp; nodemon backend/server.js",
+    "start": "webpack"
   },
   "keywords": [],
   "author": "",
