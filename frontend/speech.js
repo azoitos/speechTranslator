@@ -1,13 +1,13 @@
 //Speech Recognition
-const SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-const SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+export const SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+export const SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+export const SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
 //Speech Synthesis
 var synth = window.speechSynthesis;
 var voices = [];
 
-function populateVoiceList(voiceSelect, voiceName) {
+export function populateVoiceList(voiceSelect, voiceName) {
     voices = synth.getVoices();
     for (let i = 0; i < voices.length; i++) {
         if (voices[i].name === voiceName) {
@@ -22,7 +22,7 @@ function populateVoiceList(voiceSelect, voiceName) {
 }
 
 //Speak Function
-function speak(data, checkboxPara, voiceName) {
+export function speak(data, checkboxPara, voiceName) {
     if (checkboxPara.checked === true) {
         var utterThis = new SpeechSynthesisUtterance(data);
         for (let i = 0; i < voices.length; i++) {
@@ -32,12 +32,4 @@ function speak(data, checkboxPara, voiceName) {
         }
         synth.speak(utterThis);
     }
-}
-
-module.exports = {
-    SpeechRecognition,
-    SpeechGrammarList,
-    SpeechRecognitionEvent,
-    populateVoiceList,
-    speak
 }

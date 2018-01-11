@@ -1,6 +1,6 @@
 import axios from 'axios'
 import indexJPN, { socket } from './indexJPN'
-const { populateVoiceList, speak, SpeechRecognition, SpeechGrammarList, SpeechRecognitionEvent } = require('./speech.js');
+import { populateVoiceList, speak, SpeechRecognition, SpeechGrammarList, SpeechRecognitionEvent } from './speech.js';
 
 var checkboxPara = document.querySelector('.soundOn1');
 var voiceSelect = document.querySelector('select');
